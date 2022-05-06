@@ -5,16 +5,19 @@
 //3. Using the Azios http clinet library
 
 // Variavles
-const URL = "http://www.omdbapi.com/?apikey=a71b148a&t=Die+Hard"
+const URL = "http://www.omdbapi.com/?apikey=a71b148a&t=";
 
-// Element References
+// Element References jQuery variables
 
 const $title = $('#tittle');
 const $year = $('#year');
-const $rating = $('rated');
+const $rating = $('#rated');
+const $form = $('form');
+const $ratings = $('#ratings')
+const $input = $('input[type="text"]');
 
 //Event Listners
-
+$form.on('submit',handleGetData)
 
 
 
@@ -22,13 +25,24 @@ const $rating = $('rated');
 
 
 
-function handleGetData(){
+function handleGetData(event){
 
-$.ajax(URL).then(function(data) {
-console.log('movie data is ready')
-console.log(data)
+event.preventDefault();
+const userInput = $input.val();//target user input
+
+$.ajax(URL + userInput).then(function(data) {
+    console.log('movie data is ready')
+    console.log(data)
+    $title.text(data.Title)
+    $year.text(data.Year)
+    $rating.text(data.Rated)
+    $ratings.text(data.Ratings[1].Value)
+    $('main').append(`<img src="${data.Poster}"/>`)
 }, function(error) {
     console.log('smethingis wrong')
     console.log(error)
+
 })
+
 }
+
